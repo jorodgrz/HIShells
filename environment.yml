@@ -1,0 +1,34 @@
+name: hishells
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+
+  # Core scientific stack
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - tqdm
+  - pyyaml
+
+  # Astronomy / FITS
+  - astropy
+  - spectral-cube
+  - radio-beam
+  - reproject
+  - regions
+  - astroquery
+
+  # Image processing & classical ML
+  - scikit-image
+  - scikit-learn
+
+  # Deep learning (Apple Silicon: pytorch wheels include MPS support)
+  - pytorch
+  - torchvision
+
+  # Notebooks
+  - jupyterlab
+  - ipykernel

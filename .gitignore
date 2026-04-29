@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+
+# Conda
+.conda/
+
+# Data — too big / not source code
+Data/
+*.fits
+*.FITS
+*.crdownload
+*.crdownload.fits
+
+# Papers (binary, often copyrighted)
+Papers/
+
+# IDE / editor
+.vscode/
+.idea/
+.cursor/
