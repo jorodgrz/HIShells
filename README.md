@@ -2,11 +2,11 @@
 
 A deep-learning pipeline that detects HI shells (a.k.a. holes / bubbles) in
 21 cm radio data cubes from the THINGS survey. It ingests a FITS cube, runs a
-2D CNN over position–velocity (p–v) cuts, and outputs a table of shell
+2D CNN over position-velocity (p-v) cuts, and outputs a table of shell
 candidates with Monte Carlo dropout confidence estimates.
 
 HI shells are roughly spherical cavities in the neutral interstellar medium
-carved out by stellar winds, expanding HII regions, and supernovae — key
+carved out by stellar winds, expanding HII regions, and supernovae, key
 tracers of stellar feedback. They have historically been catalogued by eye, a
 slow and subjective process. This project tests whether a CNN trained on a
 published, hand-built catalog can reproduce human-level detections directly
@@ -38,7 +38,7 @@ The THINGS cubes and the CDS catalog are excluded from the repo via
 - Evaluate with **leave-one-galaxy-out cross-validation** so the model never
   sees the test galaxy's noise, beam, or rotation curve during training.
 
-## Quick start (conda)
+## Quick start
 
 Create and activate the environment:
 
@@ -64,31 +64,3 @@ To update an existing env after editing `environment.yml`:
 ```bash
 conda env update -f environment.yml --prune
 ```
-
-## Repository layout
-
-```
-HIShells/
-├── Data/                # THINGS cubes + Bagetakos catalog (gitignored)
-│   └── J_AJ_141_23/     # CDS bundle: ReadMe, table2.dat, table7.dat
-├── Papers/              # Background PDFs (gitignored)
-├── environment.yml      # conda environment spec
-└── README.md
-```
-
-## References
-
-PDFs live in `Papers/` (gitignored, so not part of a fresh clone).
-
-| File | Role in this project |
-| --- | --- |
-| `Bagetakos_2011_AJ_141_23.pdf` | Source catalog; defines the labels. Bagetakos, Brinks, Walter, de Blok, Usero, Leroy, Rich, Kennicutt 2011, AJ 141, 23. |
-| `CASI- A CONVOLUTIONAL NEURAL NETWORK APPROACH FOR SHELL IDENTIFICATION.pdf` | Closest prior work — CNN-based shell identification on molecular-line cubes. Methodological benchmark we want to beat in the p–v domain. |
-| `Automatic Shell Detection in CGPS Data.pdf` | Classical (non-ML) shell-finding baseline on the Canadian Galactic Plane Survey; informs our non-ML floor. |
-| `WALLABY Pilot Survey- HI source-finding with a machine learning framework.pdf` | ML source-finding precedent on HI cubes; supports the choice of CNNs over classical filtering. |
-| `H i shells in the outer Milky Way.pdf` | Observational reference for shell morphology and expansion-velocity ranges; used to sanity-check augmentation parameters. |
-| `Evidence for supernova feedback sustaining gas turbulence in nearby star-forming galaxies.pdf` | Science motivation for cataloging shells at scale: links shell populations to feedback-driven turbulence. |
-
-> Bibliographic details for the last four entries are intentionally light —
-> verify and fill in the full author lists / journal references before citing
-> in any write-up.
