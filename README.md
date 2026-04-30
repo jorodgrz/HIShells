@@ -26,6 +26,19 @@ from raw cubes.
 The THINGS cubes and the CDS catalog are excluded from the repo via
 `.gitignore`; download them locally before running the pipeline.
 
+To pull the THINGS cubes from the MPIA mirror, use the bundled scraper:
+
+```bash
+python scripts/fetch_things.py --catalog-only          # 20 NA cubes (~20 GB)
+python scripts/fetch_things.py                         # all 33 NA cubes (~30 GB)
+python scripts/fetch_things.py --product MOM0          # moment-0 maps (small)
+python scripts/fetch_things.py --dry-run               # list URLs only
+```
+
+Files land in `Data/THINGS/` by default; downloads resume across runs via
+HTTP Range. Note that IC 2574 is in the Bagetakos catalog but is not
+served from the MPIA public page, so the catalog filter yields 19/20.
+
 ## Approach
 
 - Extract fixed-size, scale-normalized **p–v cut windows** along candidate
@@ -40,17 +53,23 @@ The THINGS cubes and the CDS catalog are excluded from the repo via
 
 ## Quick start
 
-Create and activate the environment:
+Create and activate the environment, then install the `hishells` package in
+editable mode so notebooks and scripts can `import hishells`:
 
 ```bash
 conda env create -f environment.yml
 conda activate hishells
+pip install -e .
 ```
+
+(`environment.yml` already pins `pip: -e .`, so a future
+`conda env update -f environment.yml --prune` will keep the editable install
+in sync.)
 
 Verify the install — this should print `hishells env ok` with no import errors:
 
 ```bash
-python -c "import torch, astropy, spectral_cube, numpy, sklearn; print('hishells env ok')"
+python -c "import torch, astropy, spectral_cube, numpy, sklearn, hishells; print('hishells env ok')"
 ```
 
 Optionally register the env as a Jupyter kernel:
@@ -64,3 +83,55 @@ To update an existing env after editing `environment.yml`:
 ```bash
 conda env update -f environment.yml --prune
 ```
+
+## Build status (plan §11 gates)
+
+| Gate | Module(s) | Verification |
+| --- | --- | --- |
+| 1 | `hishells/catalog.py`, `notebooks/01_explore_catalog.ipynb` | `pytest tests/test_catalog.py` |
+| 2 | `hishells/cubes.py`, `notebooks/02_cube_sanity.ipynb` | notebook 02 alignment overlay |
+| 3 | `hishells/pvcut.py`, `notebooks/03_pvcut_examples.ipynb` | `pytest tests/test_pvcut.py` |
+| 4 | `hishells/{windows,augment,data}.py`, `notebooks/04_window_inspection.ipynb` | `pytest tests/test_augment.py tests/test_data.py` |
+| 5 | `hishells/baselines/{trivial,mtb}.py` | `pytest tests/test_mtb.py` |
+| 6 | `hishells/{model,loss}.py` | `pytest tests/test_model.py` |
+| 7 | `hishells/{train,eval}.py`, `scripts/train_logo.py`, `notebooks/05_training_diagnostics.ipynb` | `python scripts/train_logo.py --name v1_baseline --limit-folds 1` |
+| 8 | `hishells/predict.py`, `notebooks/{06_failure_analysis,07_mc_dropout_calibration}.ipynb` | notebook 07 reliability diagram |
+| 9 | `hishells/candidates.py` | `pytest tests/test_candidates.py` |
+| 10 | `scripts/{predict_galaxy,eval_logo}.py` | `python scripts/eval_logo.py` after a sweep |
+| 11 | `hishells/baselines/casi.py`, `scripts/run_baseline.py`, `notebooks/08_baseline_comparison.ipynb` | `python scripts/run_baseline.py --baseline trivial --name trivial_v1` |
+
+CASI-2D is *not* pip-installable. To enable that baseline, clone
+<https://gitlab.com/casi-project/casi-2d>, follow its README to grab the
+trained weights, then `export CASI_HOME=/path/to/casi-2d`. Without it the
+`casi` rows in `results/ablations.csv` are written with `notes='CASI
+unavailable'` and the rest of the LOGO sweep continues.
+
+## Run a full LOGO sweep
+
+```bash
+# 1. Train one CNN per held-out galaxy (~hours on CPU; minutes on a GPU/MPS).
+python scripts/train_logo.py --name v1_baseline
+
+# 2. Score the classical baselines under the same LOGO geometry.
+python scripts/run_baseline.py --baseline trivial --name trivial_v1
+python scripts/run_baseline.py --baseline mtb     --name mtb_v1
+# CASI is optional; only runs if CASI_HOME is set.
+python scripts/run_baseline.py --baseline casi    --name casi_v1
+
+# 3. Aggregate, bootstrap CIs, and write per-ablation summary + figures.
+python scripts/eval_logo.py
+
+# 4. Per-galaxy MC-dropout inference for downstream analysis.
+python scripts/predict_galaxy.py \
+    --cube Data/THINGS/NGC_2403_NA_CUBE_THINGS.FITS \
+    --checkpoint results/checkpoints/v1_baseline/NGC_2403.pt \
+    --out results/per_galaxy/NGC_2403.fits
+```
+
+Results land in `results/`:
+
+- `ablations.csv` — one row per `(name, fold)` with the §6.1 14-column schema.
+- `summary.csv` — bootstrapped mean ± 95% CI per ablation (from `eval_logo.py`).
+- `checkpoints/<name>/<galaxy>.pt` — per-fold model weights.
+- `figures/` — per-ablation diagnostic PNGs.
+- `per_galaxy/<galaxy>.fits` — MC-dropout candidate tables (§7 schema).

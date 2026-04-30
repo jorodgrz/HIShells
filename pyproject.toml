@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hishells"
+version = "0.1.0"
+description = "Deep-learning HI shell detection on THINGS cubes (B11 labels, MC dropout, LOGO CV)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "HIShells project"}]
+dependencies = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "tqdm",
+    "pyyaml",
+    "astropy",
+    "spectral-cube",
+    "radio-beam",
+    "reproject",
+    "scikit-image",
+    "scikit-learn",
+    "torch",
+    "torchvision",
+    "requests",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-xdist"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hishells*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::astropy.io.fits.verify.VerifyWarning",
+]

@@ -10,6 +10,19 @@ venv/
 .env
 .ipynb_checkpoints/
 
+# Build / packaging artifacts
+build/
+dist/
+*.egg
+pip-wheel-metadata/
+
+# Test / type-check caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
 # Conda
 .conda/
 
@@ -22,6 +35,18 @@ Data/
 
 # Papers (binary, often copyrighted)
 Papers/
+
+# Pipeline outputs (plan §6 / §11). Keep the directory skeleton (the
+# .gitkeep markers) so a fresh clone can run scripts/train_logo.py and
+# scripts/run_baseline.py without manually `mkdir`-ing first.
+results/*
+!results/.gitkeep
+!results/checkpoints/
+results/checkpoints/*
+!results/checkpoints/.gitkeep
+
+# Local scratch from the CASI shim (cached MOM0 FITS, score maps, etc.)
+casi_scratch/
 
 # IDE / editor
 .vscode/

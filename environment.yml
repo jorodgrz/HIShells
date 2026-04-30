@@ -32,3 +32,12 @@ dependencies:
   # Notebooks
   - jupyterlab
   - ipykernel
+
+  # Tests
+  - pytest
+  - pytest-xdist
+
+  # Install the local package in editable mode so notebooks/scripts can
+  # `import hishells` after `conda env update -f environment.yml --prune`.
+  - pip:
+      - -e .
