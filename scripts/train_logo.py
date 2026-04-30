@@ -114,8 +114,8 @@ def main(argv: list[str] | None = None) -> int:
         sigma_rms_by_galaxy[g] = sigma_rms(cubes(g))
 
     aug = no_augment() if args.no_augment else AugmentConfig()
-    ds_cfg = DatasetConfig(window_pix=64, augment=aug, rng_seed=args.seed)
-    val_ds_cfg = DatasetConfig(window_pix=64, augment=no_augment(), rng_seed=args.seed)
+    ds_cfg = DatasetConfig(window_pix=96, augment=aug, rng_seed=args.seed)
+    val_ds_cfg = DatasetConfig(window_pix=96, augment=no_augment(), rng_seed=args.seed)
 
     csv_path = args.results_dir / "ablations.csv"
     ckpt_dir = args.results_dir / "checkpoints" / args.name

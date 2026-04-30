@@ -211,5 +211,8 @@ def test_extract_window_real_cube_smoke(things_dir):
         pos_extent_arcsec=80.0,
         vel_extent_kms=40.0,
     )
-    assert win.shape == (64, 64)
+    # Default window_pix bumped from 64 to 96 in plan §2.1 (verified
+    # 2026-04-30 in 04_window_inspection.ipynb). This smoke test takes
+    # the default to confirm the default is what we think it is.
+    assert win.shape == (96, 96)
     assert np.all(np.isfinite(win))

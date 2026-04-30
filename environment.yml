@@ -37,6 +37,9 @@ dependencies:
   - pytest
   - pytest-xdist
 
+  # Parallel HTTP downloader used by scripts/fetch_things.py
+  - aria2
+
   # Install the local package in editable mode so notebooks/scripts can
   # `import hishells` after `conda env update -f environment.yml --prune`.
   - pip:

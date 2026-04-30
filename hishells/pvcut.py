@@ -8,7 +8,12 @@ representation a CNN classifies as shell vs. non-shell.
 
 Conventions per ``plan.md`` \u00a72.1:
 
-* ``window_pix = 64`` square output by default.
+* ``window_pix = 96`` square output by default. Verified in
+  ``notebooks/04_window_inspection.ipynb``: 64 px covered only ~91.7%
+  of B11 type-{2,3} holes at native sampling, below the \u00a712 \u226595%
+  gate; 96 px clears it. The CNN architecture in \u00a73.1 is fully
+  convolutional with global average pooling, so this is a runtime
+  cost change only -- weight count is unaffected.
 * Position extent ``= 2 * d_arcsec`` (``d`` from B11), centered.
 * Velocity extent ``= max(2 * V_exp, 20)`` km/s for hole types 2/3;
   for type 1 (no measurable Vexp) the fallback is
@@ -116,7 +121,7 @@ def extract_window(
     pa_deg: float,
     pos_extent_arcsec: float,
     vel_extent_kms: float,
-    window_pix: int = 64,
+    window_pix: int = 96,
     *,
     order: int = 3,
     cval: float = 0.0,
@@ -199,7 +204,7 @@ def extract_window_for_hole(
     cube: Cube,
     hole: dict,
     *,
-    window_pix: int = 64,
+    window_pix: int = 96,
     pos_factor: float = 2.0,
     vel_factor: float = 2.0,
     vel_floor_kms: float = 20.0,

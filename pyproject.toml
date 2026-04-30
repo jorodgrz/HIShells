@@ -25,7 +25,6 @@ dependencies = [
     "scikit-learn",
     "torch",
     "torchvision",
-    "requests",
 ]
 
 [project.optional-dependencies]

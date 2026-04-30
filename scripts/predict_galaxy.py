@@ -262,7 +262,7 @@ def main(argv: list[str] | None = None) -> int:
         table=table,
         cubes=store_proxy,
         sigma_rms_by_galaxy={galaxy_id: float(sigma)},
-        config=DatasetConfig(window_pix=64, augment=None),
+        config=DatasetConfig(window_pix=96, augment=None),
     )
 
     # Build & load the model. Architecture preference: --model flag,

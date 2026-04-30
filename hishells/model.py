@@ -80,7 +80,11 @@ class _ConvBlock(nn.Module):
 class SmallShellCNN(nn.Module):
     """4-block CNN per plan \u00a73.1.
 
-    Input  : ``(B, 1, 64, 64)`` (single-channel normalised p-v window).
+    Input  : ``(B, 1, H, W)`` -- the v1 default is ``96\u00d796`` per the
+             ``window_pix`` retirement in plan \u00a72.1, but the head uses
+             :class:`nn.AdaptiveAvgPool2d`, so any spatial size that
+             survives 4 max-pools (i.e. \u2265 16 and divisible enough to
+             leave a non-empty feature map) works without code changes.
     Output : ``(B, 1)`` raw logit (apply ``torch.sigmoid`` for probability).
 
     The dropout schedule (0.1, 0.1, 0.15, 0.15, 0.4) is load-bearing

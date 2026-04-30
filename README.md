@@ -26,18 +26,29 @@ from raw cubes.
 The THINGS cubes and the CDS catalog are excluded from the repo via
 `.gitignore`; download them locally before running the pipeline.
 
-To pull the THINGS cubes from the MPIA mirror, use the bundled scraper:
+To pull the THINGS cubes from the MPIA mirror, use the bundled scraper.
+It scrapes the index page and hands the URL list to `aria2c`, which
+opens several parallel TCP connections per file to defeat MPIA's
+per-connection throttling (~100 kB/s from the US):
 
 ```bash
-python scripts/fetch_things.py --catalog-only          # 20 NA cubes (~20 GB)
+python scripts/fetch_things.py --catalog-only          # 19 NA cubes (~20 GB)
 python scripts/fetch_things.py                         # all 33 NA cubes (~30 GB)
 python scripts/fetch_things.py --product MOM0          # moment-0 maps (small)
+python scripts/fetch_things.py --weighting RO          # robust-weighted instead of natural
+python scripts/fetch_things.py --galaxies NGC_2403     # explicit subset
+python scripts/fetch_things.py --connections 8 --jobs 2  # tune aria2 parallelism
 python scripts/fetch_things.py --dry-run               # list URLs only
 ```
 
-Files land in `Data/THINGS/` by default; downloads resume across runs via
-HTTP Range. Note that IC 2574 is in the Bagetakos catalog but is not
-served from the MPIA public page, so the catalog filter yields 19/20.
+`aria2c` is pinned by `environment.yml`; if you're not using the conda
+env, install it manually with `conda install -c conda-forge aria2` or
+`brew install aria2`. Files land in `Data/THINGS/` by default; partial
+downloads resume across runs (`--continue=true`) and completed files are
+not re-fetched (`--allow-overwrite=false`). IC 2574 is in the Bagetakos
+catalog but is not served from the MPIA public page, so `--catalog-only`
+yields 19 of the 20 catalog galaxies and prints a warning for the
+missing one.
 
 ## Approach
 

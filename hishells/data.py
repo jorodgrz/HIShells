@@ -84,7 +84,7 @@ class CubeStore:
 class DatasetConfig:
     """Knobs that tune :class:`ShellWindowDataset`."""
 
-    window_pix: int = 64
+    window_pix: int = 96
     pos_factor: float = 2.0
     vel_factor: float = 2.0
     vel_floor_kms: float = 20.0

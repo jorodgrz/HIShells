@@ -153,7 +153,7 @@ def predict_catalog(
     *,
     T: int = 50,
     sigma_rms_by_galaxy: dict[str, float] | None = None,
-    window_pix: int = 64,
+    window_pix: int = 96,
     batch_size: int = 64,
     device: torch.device | None = None,
 ):

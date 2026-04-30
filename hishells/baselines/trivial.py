@@ -32,7 +32,7 @@ def score_table(
     cubes: CubeStore,
     *,
     sigma_rms_by_galaxy: dict[str, float] | None = None,
-    window_pix: int = 64,
+    window_pix: int = 96,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Return ``(scores, labels)`` over every row in ``table``.
 
