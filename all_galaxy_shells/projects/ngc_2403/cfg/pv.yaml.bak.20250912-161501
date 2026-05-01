@@ -1,0 +1,29 @@
+galaxy:
+  name: NGC 2403
+  ra_deg: 114.212917
+  dec_deg: 65.600806
+  distance_mpc: 3.2
+  inc_deg: 63.0
+  pa_deg: 124.0
+  vsys_kms: null
+cube:
+  path: data/raw/NGC_2403_CUBE.fits
+pv:
+  mode: grid
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  shell_axes:
+    enabled: true
+    label_table_path: DATA/bagetakos_table7.dat
+    allowed_types:
+    - 2
+    - 3
+    fallback_to_gal_pa_if_missing: true
+  negatives:
+    enabled: true
+    n_per_shell: 2
+output_root: projects/ngc_2403

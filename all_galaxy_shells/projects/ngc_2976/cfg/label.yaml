@@ -1,0 +1,23 @@
+catalogs:
+  holes_dat: data/raw/bagetakos_table7.dat
+  target_galaxy: "NGC 2976"
+  hv_scale: auto
+  hv_offset_kms: 0.0
+  keep_types: [2,3]
+  use_circular: true
+
+label:
+  circle:
+    min_axis_ratio: 0.80
+    vexp_fallback_channels: 3
+    dilate_vel_channels: 1
+  ellipse:
+    enable: true
+    inflate_pix: 6
+    margin_pix: 2
+  pos_expand_cols: 2
+  min_vband_channels: 6
+  vband_dilate_ch: 1
+
+qa:
+  overlay_alpha: 0.35

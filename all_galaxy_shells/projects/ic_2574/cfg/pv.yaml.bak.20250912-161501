@@ -1,0 +1,29 @@
+galaxy:
+  name: IC 2574
+  ra_deg: 157.115417
+  dec_deg: 68.4165
+  distance_mpc: 4.0
+  inc_deg: 53.0
+  pa_deg: 55.0
+  vsys_kms: null
+cube:
+  path: data/raw/IC_2574_CUBE.fits
+pv:
+  mode: grid
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  shell_axes:
+    enabled: true
+    label_table_path: DATA/bagetakos_table7.dat
+    allowed_types:
+    - 2
+    - 3
+    fallback_to_gal_pa_if_missing: true
+  negatives:
+    enabled: true
+    n_per_shell: 2
+output_root: projects/ic_2574

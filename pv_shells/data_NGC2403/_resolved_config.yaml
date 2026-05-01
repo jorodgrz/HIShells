@@ -1,0 +1,106 @@
+cube_path: data/raw/NGC_2403_NA_CUBE_THINGS.FITS
+output_root: data
+catalogs:
+  holes_dat: data/raw/bagetakos_ngc2403_table7.dat
+  kin_dat: null
+  target_galaxy: NGC 2403
+  use_circular: true
+  hv_scale: auto
+  hv_offset_kms: 0.0
+  hints:
+    ra_col: null
+    dec_col: null
+    maj_col: null
+    min_col: null
+    pa_col: null
+    id_col: null
+    vexp_col: null
+    ra_unit: auto
+    dec_unit: auto
+    axes_unit: arcsec
+galaxy:
+  ra_deg: 114.20901428550664
+  dec_deg: 65.60423676012937
+  pa_deg: 124.0
+  inc_deg: 63.0
+  vsys_kms: 132.0
+  distance_mpc: 3.2
+  beam_fwhm_arcsec: null
+pv:
+  grid:
+    frame: galaxy
+    pa_convention: image
+    pa_delta_deg: 90
+    x_extent_arcsec: 360
+    y_extent_arcsec: 360
+    x_step_arcsec: 8
+    y_step_arcsec: 8
+    slit_width_pix: 3
+    margin_arcsec: 0
+    pos_step_pix: 0.25
+  axes:
+    include_major_minor: true
+  label:
+    keep_types:
+    - 2
+    - 3
+    min_axis_ratio_circular: 0.8
+    vexp_fallback_channels: 3
+    dilate_vel_channels: 1
+    pos_expand_cols: 4
+    min_vband_channels: 8
+    vband_dilate_ch: 1
+  spoke:
+    slit_width_pix: 3
+  ring:
+    r_start_arcsec: 10.0
+    r_stop_arcsec: 300.0
+    r_step_arcsec: 10.0
+    unwrap_bins: 512
+  sampling:
+    pos_samples_per_beam: 3
+    vel_smooth: 0
+    vel_subsample: 1
+train:
+  pos_fraction: 0.5
+  patch_pos: 512
+  patch_vel: 96
+  vel_channels: 128
+  norm_method: zscore_galaxy_only
+  splits:
+    train_frac: 0.7
+    val_frac: 0.2
+    test_frac: 0.1
+model:
+  base_filters: 32
+  depth: 4
+  dilation_rate: 2
+  dropout: 0.0
+optim:
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 4
+  epochs: 60
+  loss: focal_tversky
+  focal_tversky:
+    alpha: 0.7
+    beta: 0.3
+    gamma: 0.75
+post:
+  min_component_area_pv:
+  - 6
+  - 5
+  ellipse_axis_ratio_range:
+  - 0.4
+  - 2.5
+  min_perimeter_pix: 40
+aggregate:
+  vote_sigma_pix: 5
+  nms_radius_pix: 12
+  min_radius_beams: 2.5
+  max_thickness_frac: 0.4
+_meta:
+  pix_arcsec: 1.0000000242
+  dv_kms: -5161.5390625
+  _resolved: true
+  _hash: 7031ea7ebe5c

@@ -1,0 +1,30 @@
+galaxy:
+  name: "NGC 2403"
+  ra_deg: 114.212917
+  dec_deg: 65.600806
+  distance_mpc: 3.2
+  inc_deg: 63.0
+  pa_deg: 124.0
+  vsys_kms: null
+
+cube:
+  # Update to your real filename
+  path: data/raw/NGC_2403_CUBE.fits
+
+pv:
+  mode: grid          # ["grid", "majmin"]
+  grid:
+    x_extent_arcsec: 360
+    y_extent_arcsec: 360
+    x_step_arcsec: 8
+    y_step_arcsec: 8
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+
+output_root: projects/ngc_2403

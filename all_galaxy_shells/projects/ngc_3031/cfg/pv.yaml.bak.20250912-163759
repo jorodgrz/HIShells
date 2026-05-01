@@ -1,0 +1,33 @@
+galaxy:
+  name: NGC 3031
+  ra_deg: 148.887917
+  dec_deg: 69.065194
+  distance_mpc: 3.6
+  inc_deg: 59.0
+  pa_deg: 330.0
+  vsys_kms: null
+cube:
+  path: data/raw/NGC_3031_CUBE.fits
+pv:
+  mode: grid
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  shell_axes:
+    enabled: true
+    label_table_path: DATA/bagetakos_table7.dat
+    allowed_types:
+    - 2
+    - 3
+    fallback_to_gal_pa_if_missing: true
+  negatives:
+    enabled: true
+    n_per_shell: 2
+    empty_percentile: 10.0
+    min_sep_from_shell_arcsec: 60.0
+    length_arcsec: 900.0
+    orientation: galaxy_axes
+output_root: projects/ngc_3031

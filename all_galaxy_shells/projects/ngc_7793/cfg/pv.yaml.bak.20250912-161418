@@ -1,0 +1,30 @@
+galaxy:
+  name: NGC 7793
+  ra_deg: 359.457083
+  dec_deg: -32.591083
+  distance_mpc: 3.9
+  inc_deg: 50.0
+  pa_deg: 290.0
+  vsys_kms: null
+cube:
+  path: data/raw/NGC_7793_CUBE.fits
+pv:
+  mode: grid
+  grid:
+    x_extent_arcsec: 360
+    y_extent_arcsec: 360
+    x_step_arcsec: 90.0
+    y_step_arcsec: 90.0
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+    density: sparse
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  shell_axes:
+    enabled: true
+    label_table_path: DATA/bagetakos_table7.dat
+output_root: projects/ngc_7793

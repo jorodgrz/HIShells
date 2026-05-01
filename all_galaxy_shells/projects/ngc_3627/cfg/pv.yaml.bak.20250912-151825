@@ -1,0 +1,30 @@
+galaxy:
+  name: "NGC 3627"
+  ra_deg: 170.062500
+  dec_deg: 12.991556
+  distance_mpc: 9.3
+  inc_deg: 62.0
+  pa_deg: 173.0
+  vsys_kms: null
+
+cube:
+  # Update to your real filename
+  path: data/raw/NGC_3627_CUBE.fits
+
+pv:
+  mode: grid          # ["grid", "majmin"]
+  grid:
+    x_extent_arcsec: 360
+    y_extent_arcsec: 360
+    x_step_arcsec: 8
+    y_step_arcsec: 8
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+  majmin:
+    include_major: true
+    include_minor: true
+    radial_span_arcsec: 360
+    slit_width_pix: 3
+    pos_step_pix: 0.25
+
+output_root: projects/ngc_3627

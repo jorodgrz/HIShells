@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.python-version
+.venv/
+env/
+venv/
+.ipynb_checkpoints/
+
+# Artifacts
+runs/
+models/
+*.ckpt
+*.pth
+*.h5
+*.log
+
+# Data caches
+*.npz
+*.npy
+*.parquet
+
+# OS
+.DS_Store

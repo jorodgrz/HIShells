@@ -1,0 +1,12 @@
+{
+  "n_rows": 175,
+  "n_with_vexp": 175,
+  "null_counts": {
+    "ra_deg": 0,
+    "dec_deg": 0,
+    "major_arcsec": 20,
+    "minor_arcsec": 20,
+    "pa_deg": 0,
+    "vexp_kms": 0
+  }
+}

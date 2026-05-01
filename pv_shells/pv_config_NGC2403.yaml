@@ -1,0 +1,106 @@
+cube_path: data/raw/NGC_2403_NA_CUBE_THINGS.FITS
+output_root: data
+
+# ------------------------------
+# Catalogs (Bagetakos Table 7 etc.)
+# ------------------------------
+catalogs:
+  holes_dat: data/raw/bagetakos_ngc2403_table7.dat
+  kin_dat: null
+  target_galaxy: "NGC 2403"
+  use_circular: true           # allow treating nearly round shells as circles
+  hv_scale: auto               # "auto" scales HV if cube units ≠ km/s
+  hv_offset_kms: 0.0           # global shift applied to HV (after scaling)
+  hints:
+    ra_col: null
+    dec_col: null
+    maj_col: null
+    min_col: null
+    pa_col:  null
+    id_col:  null
+    vexp_col: null
+    ra_unit: auto
+    dec_unit: auto
+    axes_unit: arcsec
+
+# ------------------------------
+# Galaxy geometry (FITS fills missing)
+# ------------------------------
+galaxy:
+  ra_deg: null
+  dec_deg: null
+  pa_deg: 124.0     # position angle of major axis (deg)
+  inc_deg: 63.0     # inclination (deg)
+  vsys_kms: 132.0
+  distance_mpc: 3.2
+  beam_fwhm_arcsec: null
+
+# ------------------------------
+# PV slicing
+# ------------------------------
+pv:
+  grid:
+    frame: galaxy
+    pa_convention: image        # "astro" (E of N) or "image"
+    pa_delta_deg: 90            # quick knob; adjust ±90° if flipped
+    x_extent_arcsec: 360        # half-width along major axis
+    y_extent_arcsec: 360        # half-height along minor axis
+    x_step_arcsec: 8            # spacing of vertical cuts
+    y_step_arcsec: 8            # spacing of horizontal cuts
+    slit_width_pix: 3           # slit averaging width
+    margin_arcsec: 0
+    pos_step_pix: 0.25          # denser sampling along slice
+
+  axes:
+    include_major_minor: true
+
+  label:
+    keep_types: [2, 3]              # use only reliable shells
+    min_axis_ratio_circular: 0.80   # treat as circle if b/a ≥ 0.8
+    vexp_fallback_channels: 3       # used if Vexp missing
+    dilate_vel_channels: 1          # small dilation for robustness
+    pos_expand_cols: 4              # expand along position
+    min_vband_channels: 8           # fallback min velocity band
+    vband_dilate_ch: 1              # small dilation in velocity
+
+# ------------------------------
+# Training data generation
+# ------------------------------
+train:
+  pos_fraction: 0.5
+  patch_pos: 512
+  patch_vel: 96
+  vel_channels: 128
+  norm_method: zscore_galaxy_only
+  splits: {train_frac: 0.7, val_frac: 0.2, test_frac: 0.1}
+
+# ------------------------------
+# Model / Optim
+# ------------------------------
+model:
+  base_filters: 32
+  depth: 4
+  dilation_rate: 2
+  dropout: 0.0
+
+optim:
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 4
+  epochs: 60
+  loss: focal_tversky
+  focal_tversky: {alpha: 0.7, beta: 0.3, gamma: 0.75}
+
+# ------------------------------
+# Post-processing / Aggregation
+# ------------------------------
+post:
+  min_component_area_pv: [6, 5]
+  ellipse_axis_ratio_range: [0.4, 2.5]
+  min_perimeter_pix: 40
+
+aggregate:
+  vote_sigma_pix: 5
+  nms_radius_pix: 12
+  min_radius_beams: 2.5
+  max_thickness_frac: 0.4

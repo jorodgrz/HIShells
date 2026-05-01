@@ -1,0 +1,85 @@
+cube_path: data_NGC2403/raw/NGC_628_NA_CUBE_THINGS.FITS    # <-- put your NGC 628 cube here
+output_root: data_NGC628                     # keep outputs separate from NGC 2403
+
+catalogs:
+  holes_dat: data_NGC628/raw/bagetakos_table7.dat   # same master table; contains many galaxies
+  kin_dat: null
+  target_galaxy: "NGC 628"                   # if no rows found, try "NGC 0628"
+  use_circular: true
+  hv_scale: auto
+  hv_offset_kms: 0.0
+  hints:
+    ra_col: null
+    dec_col: null
+    maj_col: null
+    min_col: null
+    pa_col:  null
+    id_col:  null
+    vexp_col: null
+    ra_unit: auto
+    dec_unit: auto
+    axes_unit: arcsec
+
+galaxy:
+  ra_deg: null
+  dec_deg: null
+  # NGC 628 is nearly face-on; these are reasonable starting values
+  pa_deg: 25.0         # adjust after visual check if needed
+  inc_deg: 8.0         # small inclination
+  vsys_kms: 657.0      # tweak if your cube header uses a slightly different vsys
+  distance_mpc: 9.8    # adopt your preferred distance for pc→arcsec conversion
+  beam_fwhm_arcsec: null
+
+pv:
+  grid:
+    frame: galaxy
+    pa_convention: astro   # try "astro" first for new target
+    pa_delta_deg: 0        # if the tilt looks 90° off, set to +90/-90
+    # NGC 628’s HI extends ~10′+; use generous half-extents
+    x_extent_arcsec: 600
+    y_extent_arcsec: 600
+    x_step_arcsec: 8
+    y_step_arcsec: 8
+    slit_width_pix: 3
+    margin_arcsec: 0
+    pos_step_pix: 0.25
+
+  axes:
+    include_major_minor: true
+
+  label:
+    keep_types: [2, 3]
+    min_axis_ratio_circular: 0.80
+    vexp_fallback_channels: 3
+    dilate_vel_channels: 1
+    pos_expand_cols: 4
+    min_vband_channels: 8
+    vband_dilate_ch: 1
+
+train:
+  pos_fraction: 0.5
+  patch_pos: 512
+  patch_vel: 96
+  vel_channels: 128
+  norm_method: zscore_galaxy_only
+  splits: {train_frac: 0.7, val_frac: 0.2, test_frac: 0.1}
+
+model: {base_filters: 32, depth: 4, dilation_rate: 2, dropout: 0.0}
+optim:
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 4
+  epochs: 60
+  loss: focal_tversky
+  focal_tversky: {alpha: 0.7, beta: 0.3, gamma: 0.75}
+
+post:
+  min_component_area_pv: [6, 5]
+  ellipse_axis_ratio_range: [0.4, 2.5]
+  min_perimeter_pix: 40
+
+aggregate:
+  vote_sigma_pix: 5
+  nms_radius_pix: 12
+  min_radius_beams: 2.5
+  max_thickness_frac: 0.4

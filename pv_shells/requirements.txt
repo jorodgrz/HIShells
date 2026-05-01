@@ -1,0 +1,28 @@
+# === Core scientific Python stack ===
+numpy
+scipy
+pandas
+matplotlib
+pyyaml
+tqdm
+
+# === Astronomy utilities ===
+astropy
+radio_beam
+
+# === Image processing ===
+opencv-python
+scikit-image
+
+# === Machine Learning ===
+tensorflow>=2.14
+tensorflow-addons
+
+# === Debugging & verification ===
+jsonschema  # if we want to validate config files
+pytest
+pytest-xdist
+
+# === Development helpers ===
+ipython
+jupyter
