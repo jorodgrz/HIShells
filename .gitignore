@@ -26,7 +26,7 @@ htmlcov/
 # Conda
 .conda/
 
-# Data — too big / not source code
+# Data, too big / not source code
 Data/
 *.fits
 *.FITS

@@ -11,9 +11,9 @@ reproduce human-level detections directly from raw cubes.
 
 ## Data
 
-- **Cubes:** THINGS (Walter et al. 2008, AJ 136, 2563) — 34 nearby galaxies
+- **Cubes:** THINGS (Walter et al. 2008, AJ 136, 2563), 34 nearby galaxies
   in 21 cm with the VLA. <https://www2.mpia-hd.mpg.de/THINGS/Data.html>
-- **Labels:** Bagetakos et al. 2011, AJ 141, 23 — ~1046 HI holes across 20
+- **Labels:** Bagetakos et al. 2011, AJ 141, 23, ~1046 HI holes across 20
   THINGS galaxies. CDS bundle unpacks to `Data/J_AJ_141_23/`.
 
 Use the bundled scraper to pull cubes from the MPIA mirror via `aria2c`
@@ -40,7 +40,7 @@ IC 2574 is in the Bagetakos catalog but not on the MPIA page, so
 
 - Extract fixed-size, scale-normalized **p–v cut windows** along candidate
   (RA, Dec, PA) sightlines. Expanding shells leave a clean ellipse signature
-  in p–v space — a sharper feature than any single position–position image.
+  in p–v space, a sharper feature than any single position–position image.
 - Train a 2D CNN to classify each window as shell vs. non-shell.
 - Apply **Monte Carlo dropout** at inference (Gal & Ghahramani 2016) for
   per-detection confidence from many stochastic forward passes.
