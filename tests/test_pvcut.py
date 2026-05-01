@@ -162,6 +162,35 @@ def test_extract_window_centered_inside_shell():
     assert win[0, cx] > 0.5 and win[-1, cx] > 0.5
 
 
+def test_extract_window_pv_ellipse_signature():
+    """The p-v window should show the cavity shrinking as |v| -> Vexp.
+
+    This is the diagnostic feature the CNN is supposed to key on: a
+    dark interior at v=systemic that closes up as |v| approaches Vexp.
+    The window is sized to ``vel_extent = max(2*Vexp, 20) km/s``, so
+    the velocity-axis edges sit beyond the shell signature and should
+    sample the diffuse background.
+
+    Also asserts a wide percentile spread on the window, which is the
+    precondition the per-window percentile stretch in
+    ``notebooks/03_pvcut_examples.ipynb`` relies on -- if a real shell
+    window doesn't have ``p99 - p2 >> 0`` then no colormap stretch
+    will reveal a cavity.
+    """
+
+    cube, hole = _synth_cube_with_shell()
+    win = extract_window_for_hole(cube, hole, window_pix=64)
+
+    cy, cx = win.shape[0] // 2, win.shape[1] // 2
+    central_row = win[cy, :]
+    assert central_row[cx] < 0.5, "cavity invisible at v=systemic"
+    assert central_row[0] > 0.5, "low-velocity edge should not show cavity"
+    assert central_row[-1] > 0.5, "high-velocity edge should not show cavity"
+
+    p2, p99 = np.percentile(win, [2, 99])
+    assert (p99 - p2) > 0.5, "synthetic shell window has no contrast"
+
+
 def test_extract_window_pa_rotation_changes_pattern():
     """Rotating PA by 90 deg should flip the orientation pattern."""
 
