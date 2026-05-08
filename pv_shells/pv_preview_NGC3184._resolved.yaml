@@ -1,0 +1,58 @@
+cube_path: /Users/turnip/Desktop/HIShells copy/NGC_3184_NA_CUBE_THINGS.FITS
+output_root: /Users/turnip/Desktop/HIShells copy/pv_shells/preview_NGC3184
+catalogs:
+  holes_dat: /Users/turnip/Desktop/HIShells copy/J_AJ_141_23_table7.dat.txt
+  kin_dat: null
+  target_galaxy: NGC 3184
+  use_circular: true
+  hv_scale: auto
+  hv_offset_kms: 0.0
+galaxy:
+  ra_deg: 154.570833
+  dec_deg: 41.424444
+  pa_deg: 179.0
+  inc_deg: 16.0
+  vsys_kms: 589413.5
+  distance_mpc: 11.1
+  beam_fwhm_arcsec: null
+pv:
+  grid:
+    frame: galaxy
+    pa_convention: astro
+    pa_delta_deg: 0
+    x_extent_arcsec: 420
+    y_extent_arcsec: 420
+    x_step_arcsec: 30
+    y_step_arcsec: 30
+    slit_width_pix: 3
+    margin_arcsec: 0
+    pos_step_pix: 1.0
+  axes:
+    include_major_minor: true
+  label:
+    keep_types:
+    - 1
+    - 2
+    - 3
+    catalog_pa_convention: astro
+    min_axis_ratio_circular: 0.8
+    type1_velocity_half_width_kms: 10.0
+    type1_velocity_half_width_channels: 2
+    vexp_fallback_channels: 3
+    dilate_vel_channels: 1
+  spoke:
+    slit_width_pix: 3
+  ring:
+    r_start_arcsec: 10.0
+    r_stop_arcsec: 300.0
+    r_step_arcsec: 10.0
+    unwrap_bins: 512
+  sampling:
+    pos_samples_per_beam: 3
+    vel_smooth: 0
+    vel_subsample: 1
+_meta:
+  pix_arcsec: 1.50000003648
+  dv_kms: -2586.5
+  _resolved: true
+  _hash: 8d4c19e586a1

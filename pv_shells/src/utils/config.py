@@ -260,7 +260,7 @@ def resolve_config(cfg_path:str, set_pairs:List[str]=None, write_resolved:bool=T
     _stamp_warnings_if_missing(merged)
 
     if write_resolved:
-        out = Path("data/_resolved_config.yaml")
+        out = Path(cfg_path).resolve().with_name(Path(cfg_path).stem + "._resolved.yaml")
         _save_yaml(merged, out)
         print(f"[config] wrote resolved config -> {out} (hash={meta['_hash']})")
 

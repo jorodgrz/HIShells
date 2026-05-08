@@ -26,8 +26,7 @@ __VERSION__ = "make_pv.py@grid-1.1"
 # Config loader (uses resolved config if present)
 # -----------------------------------------------------------------------------
 def load_cfg(cfg_path: str):
-    res = Path("data_NGC628/_resolved_config.yaml")
-    return load_yaml(res) if res.exists() else resolve_config(cfg_path, write_resolved=True)
+    return resolve_config(cfg_path, write_resolved=True)
 
 # -----------------------------------------------------------------------------
 # Helpers
@@ -126,7 +125,19 @@ def make_grid_pv(cube, hdr, wcs, cfg, out_dir: Path, overlays_dir: Path):
 
     m0 = _moment0(cube)
 
-    def _save_line_pv(stem_base, x0, y0, dir_x, dir_y, perp_x, perp_y, half_len_pix):
+    def _save_line_pv(
+        stem_base,
+        x0,
+        y0,
+        dir_x,
+        dir_y,
+        perp_x,
+        perp_y,
+        half_len_pix,
+        *,
+        axis_name,
+        offset_arcsec,
+    ):
         # sample positions along the line
         npos = int(2 * half_len_pix / pos_step_pix) + 1
         if npos < 9:
@@ -137,6 +148,7 @@ def make_grid_pv(cube, hdr, wcs, cfg, out_dir: Path, overlays_dir: Path):
 
         # clip to in-bounds
         mask = (xs >= 0) & (xs < nx) & (ys >= 0) & (ys < ny)
+        ts = ts[mask]
         xs, ys = xs[mask], ys[mask]
         if xs.size < 8:
             return False
@@ -153,12 +165,17 @@ def make_grid_pv(cube, hdr, wcs, cfg, out_dir: Path, overlays_dir: Path):
             "script": __VERSION__, "cfg_hash": cfg["_meta"]["_hash"],
             "type": "grid",
             "frame": frame,
+            "grid_axis": axis_name,
+            "offset_arcsec": float(offset_arcsec),
             "pa_convention": conv,
             "pa_eff_deg": float(pa_eff),
             "center_pix": [float(x0), float(y0)],
             "dir_pix": [float(dir_x), float(dir_y)],     # along the line
             "perp_pix": [float(perp_x), float(perp_y)],  # across the slit
             "slit_width_pix": int(slit_w),
+            "pos_step_pix": float(pos_step_pix),
+            "pos_pix": [float(ts[0]), float(ts[-1]), float(pos_step_pix)],
+            "pos_axis_pix": [float(t) for t in ts],
             "npos": int(pv.shape[1]),
             "nv": int(pv.shape[0]),
             "vel_kms": [float(v[0]), float(v[-1]), float(v[1]-v[0])]
@@ -199,7 +216,18 @@ def make_grid_pv(cube, hdr, wcs, cfg, out_dir: Path, overlays_dir: Path):
         # human-friendly arcsec value for naming (approx via x scaling)
         xprime_as = xprime / x_pix_per_as if x_pix_per_as != 0 else 0.0
         stem = f"grid_xp_{int(round(xprime_as))}as"
-        if _save_line_pv(stem, x0, y0, dir_x=vx, dir_y=vy, perp_x=ux, perp_y=uy, half_len_pix=y_extent_pix):
+        if _save_line_pv(
+            stem,
+            x0,
+            y0,
+            dir_x=vx,
+            dir_y=vy,
+            perp_x=ux,
+            perp_y=uy,
+            half_len_pix=y_extent_pix,
+            axis_name="minor",
+            offset_arcsec=xprime_as,
+        ):
             n_minor += 1
 
     # “Horizontal” cuts: constant y′; direction is x′ (major axis)
@@ -209,7 +237,18 @@ def make_grid_pv(cube, hdr, wcs, cfg, out_dir: Path, overlays_dir: Path):
         y0 = cy + yprime * vy
         yprime_as = yprime / y_pix_per_as if y_pix_per_as != 0 else 0.0
         stem = f"grid_yp_{int(round(yprime_as))}as"
-        if _save_line_pv(stem, x0, y0, dir_x=ux, dir_y=uy, perp_x=vx, perp_y=vy, half_len_pix=x_extent_pix):
+        if _save_line_pv(
+            stem,
+            x0,
+            y0,
+            dir_x=ux,
+            dir_y=uy,
+            perp_x=vx,
+            perp_y=vy,
+            half_len_pix=x_extent_pix,
+            axis_name="major",
+            offset_arcsec=yprime_as,
+        ):
             n_major += 1
 
     return {"major": n_major, "minor": n_minor, "total": n_major + n_minor}
