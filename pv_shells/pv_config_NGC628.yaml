@@ -48,8 +48,11 @@ pv:
     include_major_minor: true
 
   label:
-    keep_types: [2, 3]
+    keep_types: [1, 2, 3]
+    catalog_pa_convention: astro
     min_axis_ratio_circular: 0.80
+    type1_velocity_half_width_kms: 10.0
+    type1_velocity_half_width_channels: 2
     vexp_fallback_channels: 3
     dilate_vel_channels: 1
     pos_expand_cols: 4

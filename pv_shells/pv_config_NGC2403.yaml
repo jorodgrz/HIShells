@@ -55,8 +55,11 @@ pv:
     include_major_minor: true
 
   label:
-    keep_types: [2, 3]              # use only reliable shells
+    keep_types: [1, 2, 3]              # include Type 1 cavities plus expanding shells
+    catalog_pa_convention: astro       # Bagetakos PA is astronomical, measured east of north
     min_axis_ratio_circular: 0.80   # treat as circle if b/a ≥ 0.8
+    type1_velocity_half_width_kms: 10.0 # local band around HV for non-expanding Type 1 shells
+    type1_velocity_half_width_channels: 2
     vexp_fallback_channels: 3       # used if Vexp missing
     dilate_vel_channels: 1          # small dilation for robustness
     pos_expand_cols: 4              # expand along position
