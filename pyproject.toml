@@ -23,6 +23,8 @@ dependencies = [
     "reproject",
     "scikit-image",
     "scikit-learn",
+    "pymc>=5.10",
+    "arviz>=0.17",
     "torch",
     "torchvision",
 ]

@@ -25,6 +25,10 @@ dependencies:
   - scikit-image
   - scikit-learn
 
+  # Bayesian inference (used by hishells.catalog_bayes / 01_explore_catalog)
+  - pymc>=5.10
+  - arviz>=0.17
+
   # Deep learning (Apple Silicon: pytorch wheels include MPS support)
   - pytorch
   - torchvision
